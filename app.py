@@ -1,9 +1,8 @@
 from flask import Flask, request, render_template, redirect, url_for
-import pytube
+from pytube import YouTube
 import os
 import time
-import urllib
-from pytube.exceptions import HTTPError
+import urllib.error
 
 app = Flask(__name__)
 
@@ -12,7 +11,7 @@ def download_video(url, format_type, max_retries=3):
     retries = 0
     while retries < max_retries:
         try:
-            video = pytube.YouTube(url)
+            video = YouTube(url)
             if format_type == 'mp4':
                 stream = video.streams.get_highest_resolution()
                 filename = f"{video.title}.mp4"
@@ -27,7 +26,7 @@ def download_video(url, format_type, max_retries=3):
                 os.makedirs(download_path)
             stream.download(output_path=download_path, filename=filename)
             return None
-        except HTTPError as e:
+        except urllib.error.HTTPError as e:
             if e.code == 429:
                 if retries < max_retries - 1:
                     print(f"Retentativa {retries + 1} após {retry_delay} segundos.")
@@ -38,10 +37,6 @@ def download_video(url, format_type, max_retries=3):
                     return "Limite de retentativas atingido."
             else:
                 return f"Erro HTTP {e.code}: {str(e)}"
-        except pytube.exceptions.RegexMatchError as e:
-            return f"Erro ao processar a URL: {str(e)}"
-        except pytube.exceptions.VideoUnavailable:
-            return "Vídeo não disponível."
         except Exception as e:
             return f"Ocorreu um erro ao baixar o vídeo: {str(e)}"
     return "Limite de retentativas atingido."
