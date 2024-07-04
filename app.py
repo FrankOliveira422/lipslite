@@ -13,7 +13,6 @@ def download():
     url = request.form['url']
     video = pytube.YouTube(url)
 
-    # Escolher o formato do arquivo (MP4 ou MP3)
     format_type = request.form['format']
 
     if format_type == 'mp4':
@@ -25,10 +24,8 @@ def download():
     else:
         return "Formato inválido!"
 
-    # Obter o caminho da pasta de downloads do usuário
-    download_path = os.path.join(os.path.expanduser('~'), 'Downloads')
-
-    # Realizar o download
+    # Salva no diretório de downloads do sistema operacional
+    download_path = os.path.join(os.path.expanduser("~"), "Downloads")
     stream.download(output_path=download_path, filename=filename)
 
     return redirect(url_for('index'))
