@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lips - Download de Vídeos do YouTube</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Lips</h1>
+        <p class="tagline">Baixe vídeos do YouTube facilmente</p>
+        <form action="/download" method="post">
+            <label for="url">URL do Vídeo:</label><br>
+            <input type="text" id="url" name="url" required><br><br>
+            <label for="format">Formato:</label>
+            <select id="format" name="format">
+                <option value="mp4">MP4</option>
+                <option value="mp3">MP3</option>
+            </select><br><br>
+            <button type="submit">Baixar</button>
+        </form>
+    </div>
+</body>
+</html>
